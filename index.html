@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title></title>
+		<link rel="stylesheet" href="css/bootstrap.min.css" />
+		<link rel="stylesheet" href="css/index.css" />
+	</head>
+	<body>
+		<div class="container" id="baseInformation">
+
+			<div id="logo" class="row">
+				<img src="img/hryy.jpg" class="thumbnail col-xs-2">
+			</div>
+
+			<div id="title" class="row">
+				<h2 class="col-xs-12 text-center">MBTI测试</h1>
+			</div>
+
+			<div id="form">
+				<form class="form-horizontal">
+
+					<div class="form-group">
+						<div class="col-xs-10 col-xs-offset-1">
+							<input type="text" class="form-control" v-model="name" placeholder="名字" />
+						</div>
+					</div>
+
+					<div class="form-group">
+						<div class="col-xs-10 col-xs-offset-1">
+							<select class="form-control" v-model="sex">
+								<option>男</option>
+								<option>女</option>
+							</select>
+						</div>
+					</div>
+
+
+					<div class="form-group">
+						<div class="col-xs-10 col-xs-offset-1">
+							<input type="tel" class="form-control" v-model="phone" placeholder="手机号" />
+						</div>
+					</div>
+
+					<div class="form-group">
+						<div class="col-xs-10 col-xs-offset-1">
+							<input type="email" class="form-control" v-model="email" placeholder="邮箱" />
+						</div>
+					</div>
+
+					<div class="form-group">
+						<div class="col-xs-10 col-xs-offset-1">
+							<select class="form-control" v-model="department">
+								<option>人事部</option>
+								<option>信息部</option>
+							</select>
+						</div>
+					</div>
+
+				</form>
+
+				<button class="btn btn-primary col-xs-10 col-xs-offset-1" data-toggle="modal" data-target="#myModal">提交</button>
+
+				<!-- 模态框（Modal） -->
+				<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+									&times;
+								</button>
+							</div>
+							<div class="modal-body">
+								<div>信息都确认过了吗</div>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-default" data-dismiss="modal">
+									再看一眼
+								</button>
+								<button type="button" class="btn btn-primary">
+									确定
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+
+
+			</div>
+
+		</div>
+	</body>
+	<script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/axios.min.js" type="text/javascript" charset="UTF-8"></script>
+	<script src="js/jquery.min.js" type="text/javascript" charset="UTF-8"></script>
+	<script src="js/bootstrap.min.js" type="text/javascript" charset="UTF-8"></script>
+	<script>
+		var vm = new Vue({
+			el: '#form',
+			data: {
+				name: null,
+				sex: '男',
+				phone: null,
+				email: null,
+				department: '人事部'
+			},
+			methods: {
+				addCandidate: function(event) {
+					alert('')
+				}
+			}
+		})
+	</script>
+</html>
