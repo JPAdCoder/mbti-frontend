@@ -179,7 +179,7 @@
 	<script src="js/bootstrap.min.js" type="text/javascript" charset="UTF-8"></script>
 
 	<script>
-		var serviceDomain = 'http://localhost:5000';
+		var serviceDomain = 'http://192.168.43.31:8080';
 		var baseInformationVm = new Vue({
 			el: '#baseInformation',
 			data: {
@@ -199,7 +199,7 @@
 				mail: null,
 				department_id: 1,
 				department_options: [],
-				isBaseInformation: false,
+				isBaseInformation: true,
 				candidate_id: null
 			},
 			created: function() {
@@ -242,14 +242,15 @@
 			el: "#question",
 			data: {
 				index: 0,
-				isQuestion: true,
+				isQuestion: false,
 				questions: null,
+				question_group_id: null,
 				picked: null,
 				pre_button: '上一题',
 				next_button: '下一题',
 				answer_result: [],
 				button_data_toggle: null,
-				button_data_target: null
+				button_data_target: null,
 			},
 			computed: {
 				// 根据isQuestion与questions获取情况判断是否展示问题界面
@@ -271,13 +272,14 @@
 				}
 			},
 			created: function() {
+				this.question_group_id = this.getQuestionGroupId();
 				this.initQuestions();
 			},
 			methods: {
 				// 获取题目信息
 				initQuestions: function() {
 					axios.post(serviceDomain + '/queryQuestion', {
-							question_group_id: 1,
+							question_group_id: this.question_group_id,
 						})
 						.then(function(response) {
 							if (response.data.result == 1) {
@@ -296,7 +298,19 @@
 						option: this.picked[this.index]
 					})
 				},
-
+				
+				// 获取链接中的参数
+				getQuestionGroupId: function(){
+					query = window.location.search.substring(1).split("&");
+					for(var i = 0; i < query.length; i++){
+						var value = query[i].split("=");
+						if(value[0] == "questionGroupId"){
+							return parseInt(value[1]);
+						}
+					}
+					return 1;
+				},
+				
 				// 前一题
 				previous: function() {
 					if (this.index == 0) {
@@ -332,8 +346,9 @@
 				// 提交答题结果
 				submitAnswer: function() {
 					axios.post(serviceDomain + '/submitAnswer', {
+							question_group_id: questionVm.question_group_id,
 							candidate: baseInformationVm.candidate_id,
-							answer_result: answer_result
+							answer_result: questionVm.answer_result
 						})
 						.then(function(response) {
 							// 提交成功
