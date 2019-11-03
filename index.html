@@ -112,7 +112,7 @@
 											<span class="input-group-addon">
 												<input type="radio" v-bind:value="option.id" v-model="picked[index]">
 											</span>
-											<input type="text" class="form-control" v-model="option.content">
+											<input type="text" class="form-control" v-model="option.content" readonly="readonly" @click="setRadio(option)">
 										</div>
 									</div>
 								</div>
@@ -179,7 +179,7 @@
 	<script src="js/bootstrap.min.js" type="text/javascript" charset="UTF-8"></script>
 
 	<script>
-		var serviceDomain = 'http://192.168.43.31:8080';
+		var serviceDomain = 'http://localhost:5000';
 		var baseInformationVm = new Vue({
 			el: '#baseInformation',
 			data: {
@@ -199,7 +199,7 @@
 				mail: null,
 				department_id: 1,
 				department_options: [],
-				isBaseInformation: true,
+				isBaseInformation: false,
 				candidate_id: null
 			},
 			created: function() {
@@ -242,7 +242,7 @@
 			el: "#question",
 			data: {
 				index: 0,
-				isQuestion: false,
+				isQuestion: true,
 				questions: null,
 				question_group_id: null,
 				picked: null,
@@ -299,6 +299,11 @@
 					})
 				},
 				
+				// 点击题目对应Input设置当前题目Radio
+				setRadio: function(option){
+					Vue.set(this.picked, this.index, option.id);
+				},
+				
 				// 获取链接中的参数
 				getQuestionGroupId: function(){
 					query = window.location.search.substring(1).split("&");
@@ -329,6 +334,11 @@
 				next: function() {
 					// 更新回答结果
 					this.updateAnswerResult();
+					// 判断当前题目是否有选择
+					if(this.picked[this.index] == null){
+						alert('请完成当前题目');
+						return;
+					}
 					// 如果是最后一题则为下一题按钮指定模态框
 					if (this.index == (this.questions.length - 1)) {
 						this.button_data_toggle = "modal";
