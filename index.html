@@ -91,6 +91,7 @@
 					</div>
 				</div>
 			</div>
+
 			<div id="question" v-if="isQuestionShow">
 
 				<div>
@@ -127,7 +128,8 @@
 								</div>
 
 								<div class="col-xs-6">
-									<button type="button" class="btn btn-primary btn-sm pull-right" @click="next" data-toggle="modal" >
+									<button type="button" class="btn btn-primary btn-sm pull-right" @click="next" v-bind:data-toggle="button_data_toggle"
+									 v-bind:data-target="button_data_target">
 										{{next_button}}
 										<span class="glyphicon glyphicon-menu-right"></span>
 									</button>
@@ -136,7 +138,7 @@
 						</div>
 					</div>
 				</div>
-				
+
 				<!-- 模态框（Modal） -->
 				<div class="modal fade" id="submitModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel"
 				 aria-hidden="true">
@@ -154,7 +156,7 @@
 								<button type="button" class="btn btn-default" data-dismiss="modal">
 									再看一眼
 								</button>
-								<button type="button" class="btn btn-primary" @click="submitQuestions" data-dismiss="modal">
+								<button type="button" class="btn btn-primary" data-dismiss="modal" @click="submitAnswer">
 									确定
 								</button>
 							</div>
@@ -162,6 +164,10 @@
 					</div>
 				</div>
 
+			</div>
+
+			<div id="finish" v-if="isFinish">
+				<h1 class="text-center">感谢您的参与!</h1>
 			</div>
 
 		</div>
@@ -193,7 +199,8 @@
 				mail: null,
 				department_id: 1,
 				department_options: [],
-				isBaseInformation: false
+				isBaseInformation: false,
+				candidate_id: null
 			},
 			created: function() {
 				this.initDepartmentMessage();
@@ -222,6 +229,7 @@
 						.then(function(response) {
 							baseInformationVm.isBaseInformation = false;
 							questionVm.isQuestion = true;
+							baseInformationVm.candidate_id = response.data.data.id;
 						})
 						.catch(function(error) {
 							console.log(error);
@@ -239,7 +247,9 @@
 				picked: null,
 				pre_button: '上一题',
 				next_button: '下一题',
-				answer_result: []
+				answer_result: [],
+				button_data_toggle: null,
+				button_data_target: null
 			},
 			computed: {
 				// 根据isQuestion与questions获取情况判断是否展示问题界面
@@ -252,8 +262,8 @@
 				},
 				// 判断当前是否所有题都已经做完
 				isQuestionsComplete: function() {
-					for(let item in this.answer_result){
-						if(typeof(item.option) == 'undefine'){
+					for (let item in this.answer_result) {
+						if (typeof(item.option) == 'undefine') {
 							return false;
 						}
 					}
@@ -278,6 +288,7 @@
 
 						})
 				},
+
 				// 更新答题结果
 				updateAnswerResult: function() {
 					Vue.set(this.answer_result, this.index, {
@@ -285,26 +296,66 @@
 						option: this.picked[this.index]
 					})
 				},
+
 				// 前一题
 				previous: function() {
 					if (this.index == 0) {
 						alert('已经是第一题了')
-					} else {
-						this.updateAnswerResult();
-						this.index = this.index - 1;
+						return;
+					} else if (this.index == (this.questions.length - 1)) {
+						this.button_data_toggle = null;
+						this.button_data_target = null;
+						this.next_button = "下一题"
 					}
+					this.index = this.index - 1;
 
 				},
-				// 后一题
+
+				// 后一题&提交
 				next: function() {
+					// 更新回答结果
+					this.updateAnswerResult();
+					// 如果是最后一题则为下一题按钮指定模态框
 					if (this.index == (this.questions.length - 1)) {
-					} else {
-						this.updateAnswerResult();
-						this.index = this.index + 1;
+						this.button_data_toggle = "modal";
+						this.button_data_target = "#submitModal";
+						return;
 					}
+					// 如果是倒数第二题则为下一题按钮指定内容为提交
+					else if (this.index == (this.questions.length - 2)) {
+						this.next_button = "提交"
+					}
+					// 除最后一题外均执行更新当前索引操作以实现更新问题
+					this.index = this.index + 1;
 				},
+
 				// 提交答题结果
+				submitAnswer: function() {
+					axios.post(serviceDomain + '/submitAnswer', {
+							candidate: baseInformationVm.candidate_id,
+							answer_result: answer_result
+						})
+						.then(function(response) {
+							// 提交成功
+							// 隐藏问题面板
+							questionVm.isQuestion = false;
+							questionVm.questions = null;
+							finishVm.isFinish = true;
+
+						})
+						.catch(function(error) {
+							
+						})
+				}
+
 			}
-		})
+		});
+
+		var finishVm = new Vue({
+			el: "#finish",
+			data: {
+				isFinish: false
+			}
+		});
 	</script>
 </html>
