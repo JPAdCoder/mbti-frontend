@@ -1,386 +1,390 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<title>华润MBTI测试</title>
-		<link rel="stylesheet" href="css/bootstrap.min.css" />
-		<link rel="stylesheet" href="css/index.css" />
-	</head>
-	<body>
-		<div class="container" id="container">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>华润MBTI测试</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="css/index.css"/>
+    <script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/axios.min.js" type="text/javascript" charset="UTF-8"></script>
+    <script src="js/jquery-3.4.1.min.js" type="text/javascript" charset="UTF-8"></script>
+    <script src="js/bootstrap.min.js" type="text/javascript" charset="UTF-8"></script>
+</head>
+<body>
+<div class="container" id="container">
 
-			<div id="logo" class="row">
-				<img src="img/hryy.jpg" class="thumbnail col-xs-2">
-			</div>
-
-
-			<div id="baseInformation" v-if="isBaseInformation">
-				<div id="title" class="row">
-					<h2 class="col-xs-12 text-center">MBTI测试</h2>
-				</div>
-
-				<div id="form">
-					<form class="form-horizontal">
-
-						<div class="form-group">
-							<div class="col-xs-10 col-xs-offset-1">
-								<input type="text" class="form-control" v-model="name" placeholder="名字" />
-							</div>
-						</div>
-
-						<div class="form-group">
-							<div class="col-xs-10 col-xs-offset-1">
-								<select class="form-control" v-model="sex">
-									<option v-for="option in sex_options" v-bind:value="option.value">
-										{{option.text}}
-									</option>
-								</select>
-							</div>
-						</div>
+    <div id="logo" class="row">
+        <img src="img/hryy.jpg" class="thumbnail col-xs-2">
+    </div>
 
 
-						<div class="form-group">
-							<div class="col-xs-10 col-xs-offset-1">
-								<input type="tel" class="form-control" v-model="phone" placeholder="手机号" />
-							</div>
-						</div>
+    <div id="baseInformation" v-if="isBaseInformation">
+        <div id="title" class="row">
+            <h2 class="col-xs-12 text-center">MBTI测试</h2>
+        </div>
 
-						<div class="form-group">
-							<div class="col-xs-10 col-xs-offset-1">
-								<input type="email" class="form-control" v-model="mail" placeholder="邮箱" />
-							</div>
-						</div>
+        <div id="form">
+            <form class="form-horizontal">
 
-						<div class="form-group">
-							<div class="col-xs-10 col-xs-offset-1">
-								<select class="form-control" v-model="department_id">
-									<option v-for="department_option in department_options" v-bind:value="department_option.id">
-										{{department_option.department_name}}
-									</option>
-								</select>
-							</div>
-						</div>
-					</form>
+                <div class="form-group">
+                    <div class="col-xs-10 col-xs-offset-1">
+                        <input type="text" class="form-control" v-model="name" placeholder="名字"/>
+                    </div>
+                </div>
 
-					<button class="btn btn-primary col-xs-10 col-xs-offset-1" data-toggle="modal" data-target="#confirmModal">提交</button>
-
-					<!-- 模态框（Modal） -->
-					<div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel"
-					 aria-hidden="true">
-						<div class="modal-dialog">
-							<div class="modal-content">
-								<div class="modal-header">
-									<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-										&times;
-									</button>
-								</div>
-								<div class="modal-body">
-									<div>确认提交吗</div>
-								</div>
-								<div class="modal-footer">
-									<button type="button" class="btn btn-default" data-dismiss="modal">
-										再看一眼
-									</button>
-									<button type="button" class="btn btn-primary" @click="addCandidate" data-dismiss="modal">
-										确定
-									</button>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<div id="question" v-if="isQuestionShow">
-
-				<div>
-					<div class="panel panel-default">
-						<div class="panel-body">
-
-							<form class="form-horizontal">
-								<div class="form-group">
-									<label class="col-sm-2 control-label">{{questions[index].question}}</label>
-								</div>
+                <div class="form-group">
+                    <div class="col-xs-10 col-xs-offset-1">
+                        <select class="form-control" v-model="sex">
+                            <option v-for="option in sex_options" v-bind:value="option.value">
+                                {{option.text}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
 
 
-								<div class="form-group" v-for="option in questions[index].options">
+                <div class="form-group">
+                    <div class="col-xs-10 col-xs-offset-1">
+                        <input type="tel" class="form-control" v-model="phone" placeholder="手机号"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-xs-10 col-xs-offset-1">
+                        <input type="email" class="form-control" v-model="mail" placeholder="邮箱"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-xs-10 col-xs-offset-1">
+                        <select class="form-control" v-model="department_id">
+                            <option v-for="department_option in department_options" v-bind:value="department_option.id">
+                                {{department_option.department_name}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </form>
+
+            <button class="btn btn-primary col-xs-10 col-xs-offset-1" data-toggle="modal" data-target="#confirmModal">
+                提交
+            </button>
+
+            <!-- 模态框（Modal） -->
+            <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                &times;
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div>确认提交吗</div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">
+                                再看一眼
+                            </button>
+                            <button type="button" class="btn btn-primary" @click="addCandidate" data-dismiss="modal">
+                                确定
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="question" v-if="isQuestionShow">
+
+        <div>
+            <div class="panel panel-default">
+                <div class="panel-body">
+
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">{{questions[index].question}}</label>
+                        </div>
 
 
-									<div class="col-xs-12">
-										<div class="input-group">
+                        <div class="form-group" v-for="option in questions[index].options">
+
+
+                            <div class="col-xs-12">
+                                <div class="input-group">
 											<span class="input-group-addon">
 												<input type="radio" v-bind:value="option.id" v-model="picked[index]">
 											</span>
-											<input type="text" class="form-control" v-model="option.content" readonly="readonly" @click="setRadio(option)">
-										</div>
-									</div>
-								</div>
+                                    <input type="text" class="form-control" v-model="option.content" readonly="readonly"
+                                           @click="setRadio(option)">
+                                </div>
+                            </div>
+                        </div>
 
-							</form>
+                    </form>
 
-							<div class="row">
-								<div class="col-xs-6">
-									<button type="button" class="btn btn-primary btn-sm" @click="previous">
-										<span class="glyphicon glyphicon-menu-left"></span>
-										{{pre_button}}
-									</button>
-								</div>
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <button type="button" class="btn btn-primary btn-sm" @click="previous">
+                                <span class="glyphicon glyphicon-menu-left"></span>
+                                {{pre_button}}
+                            </button>
+                        </div>
 
-								<div class="col-xs-6">
-									<button type="button" class="btn btn-primary btn-sm pull-right" @click="next" v-bind:data-toggle="button_data_toggle"
-									 v-bind:data-target="button_data_target">
-										{{next_button}}
-										<span class="glyphicon glyphicon-menu-right"></span>
-									</button>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
+                        <div class="col-xs-6">
+                            <button type="button" class="btn btn-primary btn-sm pull-right" @click="next"
+                                    v-bind:data-toggle="button_data_toggle"
+                                    v-bind:data-target="button_data_target">
+                                {{next_button}}
+                                <span class="glyphicon glyphicon-menu-right"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-				<!-- 模态框（Modal） -->
-				<div class="modal fade" id="submitModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel"
-				 aria-hidden="true">
-					<div class="modal-dialog">
-						<div class="modal-content">
-							<div class="modal-header">
-								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-									&times;
-								</button>
-							</div>
-							<div class="modal-body">
-								<div>确认提交吗？</div>
-							</div>
-							<div class="modal-footer">
-								<button type="button" class="btn btn-default" data-dismiss="modal">
-									再看一眼
-								</button>
-								<button type="button" class="btn btn-primary" data-dismiss="modal" @click="submitAnswer">
-									确定
-								</button>
-							</div>
-						</div>
-					</div>
-				</div>
+        <!-- 模态框（Modal） -->
+        <div class="modal fade" id="submitModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div>确认提交吗？</div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">
+                            再看一眼
+                        </button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal" @click="submitAnswer">
+                            确定
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-			</div>
+    </div>
 
-			<div id="finish" v-if="isFinish">
-				<h1 class="text-center">感谢您的参与!</h1>
-			</div>
+    <div id="finish" v-if="isFinish">
+        <h1 class="text-center">感谢您的参与!</h1>
+    </div>
 
-		</div>
-	</body>
+</div>
+</body>
 
-	<script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
-	<script src="js/axios.min.js" type="text/javascript" charset="UTF-8"></script>
-	<script src="js/jquery-3.4.1.min.js" type="text/javascript" charset="UTF-8"></script>
-	<script src="js/bootstrap.min.js" type="text/javascript" charset="UTF-8"></script>
+<script>
+    let serviceDomain = 'http://adcoder.club:10085';
+    let baseInformationVm = new Vue({
+        el: '#baseInformation',
+        data: {
+            name: null,
+            // 此处使用Select使用v-model绑定 Option使用v-for绑定 指定select的值时指定value属性
+            sex: 1,
+            sex_options: [
+                {
+                    text: '男',
+                    value: 1
+                },
+                {
+                    text: '女',
+                    value: 2
+                }
+            ],
+            phone: null,
+            mail: null,
+            department_id: 1,
+            department_options: [],
+            isBaseInformation: true,
+            candidate_id: null
+        },
+        created: function () {
+            this.initDepartmentMessage();
+        },
+        methods: {
+            // 获取部门信息
+            initDepartmentMessage: function () {
+                axios.get(serviceDomain + '/queryDepartment', {})
+                    .then(function (response) {
+                        baseInformationVm.department_options = response.data.departments;
+                        baseInformationVm.department_id = response.data.departments[0].id;
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    })
+            },
+            // 根据输入信息添加候选人
+            addCandidate: function () {
+                axios.post(serviceDomain + '/addCandidate', {
+                    name: this.name,
+                    sex: this.sex,
+                    phone: this.phone,
+                    mail: this.mail,
+                    department_id: this.department_id
+                })
+                    .then(function (response) {
+                        baseInformationVm.isBaseInformation = false;
+                        questionVm.isQuestion = true;
+                        baseInformationVm.candidate_id = response.data.data.id;
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    })
+            }
+        }
+    });
 
-	<script>
-		var serviceDomain = 'http://localhost:5000';
-		var baseInformationVm = new Vue({
-			el: '#baseInformation',
-			data: {
-				name: null,
-				// 此处使用Select使用v-model绑定 Option使用v-for绑定 指定select的值时指定value属性
-				sex: 1,
-				sex_options: [{
-						text: '男',
-						value: 1
-					},
-					{
-						text: '女',
-						value: 2
-					}
-				],
-				phone: null,
-				mail: null,
-				department_id: 1,
-				department_options: [],
-				isBaseInformation: false,
-				candidate_id: null
-			},
-			created: function() {
-				this.initDepartmentMessage();
-			},
-			methods: {
-				// 获取部门信息
-				initDepartmentMessage: function() {
-					axios.get(serviceDomain + '/queryDepartment', {})
-						.then(function(response) {
-							baseInformationVm.department_options = response.data.departments;
-							baseInformationVm.department_id = response.data.departments[0].id;
-						})
-						.catch(function(error) {
-							console.log(error);
-						})
-				},
-				// 根据输入信息添加候选人
-				addCandidate: function() {
-					axios.post(serviceDomain + '/addCandidate', {
-							name: this.name,
-							sex: this.sex,
-							phone: this.phone,
-							mail: this.mail,
-							department_id: this.department_id
-						})
-						.then(function(response) {
-							baseInformationVm.isBaseInformation = false;
-							questionVm.isQuestion = true;
-							baseInformationVm.candidate_id = response.data.data.id;
-						})
-						.catch(function(error) {
-							console.log(error);
-						})
-				}
-			}
-		});
+    let questionVm = new Vue({
+        el: "#question",
+        data: {
+            index: 0,
+            isQuestion: false,
+            questions: null,
+            question_group_id: null,
+            picked: null,
+            pre_button: '上一题',
+            next_button: '下一题',
+            answer_result: [],
+            button_data_toggle: null,
+            button_data_target: null,
+        },
+        computed: {
+            // 根据isQuestion与questions获取情况判断是否展示问题界面
+            isQuestionShow: function () {
+                if (this.isQuestion && this.questions != null) {
+                    return true;
+                } else {
+                    return false;
+                }
+            },
+            // 判断当前是否所有题都已经做完
+            isQuestionsComplete: function () {
+                for (let item in this.answer_result) {
+                    if (typeof (item.option) == 'undefine') {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        },
+        created: function () {
+            this.question_group_id = this.getQuestionGroupId();
+            this.initQuestions();
+        },
+        methods: {
+            // 获取题目信息
+            initQuestions: function () {
+                axios.post(serviceDomain + '/queryQuestion', {
+                    question_group_id: this.question_group_id,
+                })
+                    .then(function (response) {
+                        if (response.data.result == 1) {
+                            questionVm.questions = response.data.questions;
+                            questionVm.picked = new Array(response.data.questions.length)
+                            questionVm.answer_result = new Array(response.data.questions.length);
+                        }
 
-		var questionVm = new Vue({
-			el: "#question",
-			data: {
-				index: 0,
-				isQuestion: true,
-				questions: null,
-				question_group_id: null,
-				picked: null,
-				pre_button: '上一题',
-				next_button: '下一题',
-				answer_result: [],
-				button_data_toggle: null,
-				button_data_target: null,
-			},
-			computed: {
-				// 根据isQuestion与questions获取情况判断是否展示问题界面
-				isQuestionShow: function() {
-					if (this.isQuestion && this.questions != null) {
-						return true;
-					} else {
-						return false;
-					}
-				},
-				// 判断当前是否所有题都已经做完
-				isQuestionsComplete: function() {
-					for (let item in this.answer_result) {
-						if (typeof(item.option) == 'undefine') {
-							return false;
-						}
-					}
-					return true;
-				}
-			},
-			created: function() {
-				this.question_group_id = this.getQuestionGroupId();
-				this.initQuestions();
-			},
-			methods: {
-				// 获取题目信息
-				initQuestions: function() {
-					axios.post(serviceDomain + '/queryQuestion', {
-							question_group_id: this.question_group_id,
-						})
-						.then(function(response) {
-							if (response.data.result == 1) {
-								questionVm.questions = response.data.questions;
-								questionVm.picked = new Array(response.data.questions.length)
-								questionVm.answer_result = new Array(response.data.questions.length);
-							}
+                    })
+            },
 
-						})
-				},
+            // 更新答题结果
+            updateAnswerResult: function () {
+                Vue.set(this.answer_result, this.index, {
+                    question: this.questions[this.index].id,
+                    option: this.picked[this.index]
+                })
+            },
 
-				// 更新答题结果
-				updateAnswerResult: function() {
-					Vue.set(this.answer_result, this.index, {
-						question: this.questions[this.index].id,
-						option: this.picked[this.index]
-					})
-				},
-				
-				// 点击题目对应Input设置当前题目Radio
-				setRadio: function(option){
-					Vue.set(this.picked, this.index, option.id);
-				},
-				
-				// 获取链接中的参数
-				getQuestionGroupId: function(){
-					query = window.location.search.substring(1).split("&");
-					for(var i = 0; i < query.length; i++){
-						var value = query[i].split("=");
-						if(value[0] == "questionGroupId"){
-							return parseInt(value[1]);
-						}
-					}
-					return 1;
-				},
-				
-				// 前一题
-				previous: function() {
-					if (this.index == 0) {
-						alert('已经是第一题了')
-						return;
-					} else if (this.index == (this.questions.length - 1)) {
-						this.button_data_toggle = null;
-						this.button_data_target = null;
-						this.next_button = "下一题"
-					}
-					this.index = this.index - 1;
+            // 点击题目对应Input设置当前题目Radio
+            setRadio: function (option) {
+                Vue.set(this.picked, this.index, option.id);
+            },
 
-				},
+            // 获取链接中的参数
+            getQuestionGroupId: function () {
+                query = window.location.search.substring(1).split("&");
+                for (let i = 0; i < query.length; i++) {
+                    let value = query[i].split("=");
+                    if (value[0] == "questionGroupId") {
+                        return parseInt(value[1]);
+                    }
+                }
+                return 1;
+            },
 
-				// 后一题&提交
-				next: function() {
-					// 更新回答结果
-					this.updateAnswerResult();
-					// 判断当前题目是否有选择
-					if(this.picked[this.index] == null){
-						alert('请完成当前题目');
-						return;
-					}
-					// 如果是最后一题则为下一题按钮指定模态框
-					if (this.index == (this.questions.length - 1)) {
-						this.button_data_toggle = "modal";
-						this.button_data_target = "#submitModal";
-						return;
-					}
-					// 如果是倒数第二题则为下一题按钮指定内容为提交
-					else if (this.index == (this.questions.length - 2)) {
-						this.next_button = "提交"
-					}
-					// 除最后一题外均执行更新当前索引操作以实现更新问题
-					this.index = this.index + 1;
-				},
+            // 前一题
+            previous: function () {
+                if (this.index == 0) {
+                    alert('已经是第一题了')
+                    return;
+                } else if (this.index == (this.questions.length - 1)) {
+                    this.button_data_toggle = null;
+                    this.button_data_target = null;
+                    this.next_button = "下一题"
+                }
+                this.index = this.index - 1;
 
-				// 提交答题结果
-				submitAnswer: function() {
-					axios.post(serviceDomain + '/submitAnswer', {
-							question_group_id: questionVm.question_group_id,
-							candidate: baseInformationVm.candidate_id,
-							answer_result: questionVm.answer_result
-						})
-						.then(function(response) {
-							// 提交成功
-							// 隐藏问题面板
-							questionVm.isQuestion = false;
-							questionVm.questions = null;
-							finishVm.isFinish = true;
+            },
 
-						})
-						.catch(function(error) {
-							
-						})
-				}
+            // 后一题&提交
+            next: function () {
+                // 更新回答结果
+                this.updateAnswerResult();
+                // 判断当前题目是否有选择
+                if (this.picked[this.index] == null) {
+                    alert('请完成当前题目');
+                    return;
+                }
+                // 如果是最后一题则为下一题按钮指定模态框
+                if (this.index == (this.questions.length - 1)) {
+                    this.button_data_toggle = "modal";
+                    this.button_data_target = "#submitModal";
+                    return;
+                }
+                // 如果是倒数第二题则为下一题按钮指定内容为提交
+                else if (this.index == (this.questions.length - 2)) {
+                    this.next_button = "提交"
+                }
+                // 除最后一题外均执行更新当前索引操作以实现更新问题
+                this.index = this.index + 1;
+            },
 
-			}
-		});
+            // 提交答题结果
+            submitAnswer: function () {
+                axios.post(serviceDomain + '/submitAnswer', {
+                    question_group_id: questionVm.question_group_id,
+                    candidate: baseInformationVm.candidate_id,
+                    answer_result: questionVm.answer_result
+                })
+                    .then(function (response) {
+                        // 提交成功
+                        // 隐藏问题面板
+                        questionVm.isQuestion = false;
+                        questionVm.questions = null;
+                        finishVm.isFinish = true;
 
-		var finishVm = new Vue({
-			el: "#finish",
-			data: {
-				isFinish: false
-			}
-		});
-	</script>
+                    })
+                    .catch(function (error) {
+
+                    })
+            }
+
+        }
+    });
+
+    let finishVm = new Vue({
+        el: "#finish",
+        data: {
+            isFinish: false
+        }
+    });
+</script>
 </html>
